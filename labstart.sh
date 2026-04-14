@@ -454,6 +454,198 @@ EOF
     printf "${GREEN}✔ Dashy config generated at $DASHY_CONFIG${NC}\n"
 fi
 
+# --- Generate Homepage Config ---
+if [ "$DASHBOARD" = "homepage" ]; then
+    printf "\n${CYAN}Generating Homepage config...${NC}\n"
+
+    HOMEPAGE_CONFIG="config/homepage/services.yaml"
+    mkdir -p config/homepage
+
+    cat > $HOMEPAGE_CONFIG << EOF
+- My Services:
+EOF
+
+    [ "$DNS" = "pihole" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Pi-hole:
+        icon: pi-hole.png
+        href: http://$LOCAL_IP:8080
+        description: Network ad blocker
+EOF
+
+    [ "$DNS" = "adguard" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - AdGuard Home:
+        icon: adguard-home.png
+        href: http://$LOCAL_IP:3000
+        description: Network ad blocker
+EOF
+
+    [ "$MONITORING" = "uptime-kuma" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Uptime Kuma:
+        icon: uptime-kuma.png
+        href: http://$LOCAL_IP:3001
+        description: Service monitoring
+EOF
+
+    [ "$MONITORING" = "netdata" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Netdata:
+        icon: netdata.png
+        href: http://$LOCAL_IP:19999
+        description: Real-time monitoring
+EOF
+
+    [ "$MEDIA" = "jellyfin" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Jellyfin:
+        icon: jellyfin.png
+        href: http://$LOCAL_IP:8096
+        description: Media server
+EOF
+
+    [ "$MEDIA" = "plex" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Plex:
+        icon: plex.png
+        href: http://$LOCAL_IP:32400
+        description: Media server
+EOF
+
+    [ "$MEDIA" = "emby" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Emby:
+        icon: emby.png
+        href: http://$LOCAL_IP:8097
+        description: Media server
+EOF
+
+    [ "$CONTAINER" = "portainer" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Portainer:
+        icon: portainer.png
+        href: http://$LOCAL_IP:9000
+        description: Container management
+EOF
+
+    [ "$CONTAINER" = "yacht" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Yacht:
+        icon: yacht.png
+        href: http://$LOCAL_IP:8001
+        description: Container management
+EOF
+
+    [ "$CONTAINER" = "komodo" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Komodo:
+        icon: komodo.png
+        href: http://$LOCAL_IP:9120
+        description: Container management
+EOF
+
+    [ "$VPN" = "wireguard" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - WireGuard:
+        icon: wireguard.png
+        href: http://$LOCAL_IP:51821
+        description: VPN
+EOF
+
+    [ "$VPN" = "tailscale" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Tailscale:
+        icon: tailscale.png
+        href: https://login.tailscale.com/admin
+        description: Mesh VPN
+EOF
+
+    [ "$VPN" = "headscale" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Headscale:
+        icon: headscale.png
+        href: http://$LOCAL_IP:8085
+        description: Self-hosted VPN
+EOF
+
+    [ "$DDNS" = "cloudflare-ddns" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Cloudflare DDNS:
+        icon: cloudflare.png
+        href: https://dash.cloudflare.com
+        description: Dynamic DNS
+EOF
+
+    [ "$DDNS" = "duckdns" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - DuckDNS:
+        icon: duckdns.png
+        href: https://www.duckdns.org
+        description: Dynamic DNS
+EOF
+
+    [ "$DDNS" = "noip" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - No-IP:
+        icon: noip.png
+        href: https://www.noip.com
+        description: Dynamic DNS
+EOF
+
+    [ "$DDNS" = "dynu" ] && cat >> $HOMEPAGE_CONFIG << EOF
+    - Dynu:
+        icon: dynu.png
+        href: https://www.dynu.com
+        description: Dynamic DNS
+EOF
+
+    printf "${GREEN}✔ Homepage config generated at $HOMEPAGE_CONFIG${NC}\n"
+fi
+
+# --- Generate Homarr Config ---
+if [ "$DASHBOARD" = "homarr" ]; then
+    printf "\n${CYAN}Generating Homarr config...${NC}\n"
+
+    HOMARR_CONFIG="config/homarr/default.json"
+    mkdir -p config/homarr
+
+    cat > $HOMARR_CONFIG << EOF
+{
+  "name": "My Homelab",
+  "apps": [
+EOF
+
+    FIRST=true
+
+    add_homarr_tile() {
+        local name=$1
+        local url=$2
+        local icon=$3
+        if [ "$FIRST" = true ]; then
+            FIRST=false
+        else
+            echo "," >> $HOMARR_CONFIG
+        fi
+        cat >> $HOMARR_CONFIG << EOF
+    {
+      "name": "$name",
+      "url": "$url",
+      "icon": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/$icon.png"
+    }
+EOF
+    }
+
+    [ "$DNS" = "pihole" ] && add_homarr_tile "Pi-hole" "http://$LOCAL_IP:8080" "pi-hole"
+    [ "$DNS" = "adguard" ] && add_homarr_tile "AdGuard Home" "http://$LOCAL_IP:3000" "adguard-home"
+    [ "$MONITORING" = "uptime-kuma" ] && add_homarr_tile "Uptime Kuma" "http://$LOCAL_IP:3001" "uptime-kuma"
+    [ "$MONITORING" = "netdata" ] && add_homarr_tile "Netdata" "http://$LOCAL_IP:19999" "netdata"
+    [ "$MEDIA" = "jellyfin" ] && add_homarr_tile "Jellyfin" "http://$LOCAL_IP:8096" "jellyfin"
+    [ "$MEDIA" = "plex" ] && add_homarr_tile "Plex" "http://$LOCAL_IP:32400" "plex"
+    [ "$MEDIA" = "emby" ] && add_homarr_tile "Emby" "http://$LOCAL_IP:8097" "emby"
+    [ "$CONTAINER" = "portainer" ] && add_homarr_tile "Portainer" "http://$LOCAL_IP:9000" "portainer"
+    [ "$CONTAINER" = "yacht" ] && add_homarr_tile "Yacht" "http://$LOCAL_IP:8001" "yacht"
+    [ "$CONTAINER" = "komodo" ] && add_homarr_tile "Komodo" "http://$LOCAL_IP:9120" "komodo"
+    [ "$VPN" = "wireguard" ] && add_homarr_tile "WireGuard" "http://$LOCAL_IP:51821" "wireguard"
+    [ "$VPN" = "tailscale" ] && add_homarr_tile "Tailscale" "https://login.tailscale.com/admin" "tailscale"
+    [ "$VPN" = "headscale" ] && add_homarr_tile "Headscale" "http://$LOCAL_IP:8085" "headscale"
+    [ "$DDNS" = "cloudflare-ddns" ] && add_homarr_tile "Cloudflare DDNS" "https://dash.cloudflare.com" "cloudflare"
+    [ "$DDNS" = "duckdns" ] && add_homarr_tile "DuckDNS" "https://www.duckdns.org" "duckdns"
+    [ "$DDNS" = "noip" ] && add_homarr_tile "No-IP" "https://www.noip.com" "noip"
+    [ "$DDNS" = "dynu" ] && add_homarr_tile "Dynu" "https://www.dynu.com" "dynu"
+
+    cat >> $HOMARR_CONFIG << EOF
+  ]
+}
+EOF
+
+    printf "${GREEN}✔ Homarr config generated at $HOMARR_CONFIG${NC}\n"
+fi
+
 # --- Generate .env file ---
 printf "\n${CYAN}Generating .env file...${NC}\n"
 sleep 1
