@@ -162,6 +162,24 @@ if [ "$DNS" = "pihole" ]; then
     echo ""
     printf "${CYAN}[ Pi-hole Setup ]${NC}\n"
     echo ""
+    
+    # Check if systemd-resolved is running
+    if systemctl is-active --quiet systemd-resolved; then
+        printf "${YELLOW}⚠ Pi-hole requires port 53, but systemd-resolved is using it.${NC}\n"
+        printf "${YELLOW}Would you like LabStart to disable systemd-resolved? [y/n]: ${NC}"
+        read DISABLE_RESOLVED
+        
+        if [ "$DISABLE_RESOLVED" = "y" ] || [ "$DISABLE_RESOLVED" = "Y" ]; then
+            sudo systemctl disable systemd-resolved
+            sudo systemctl stop systemd-resolved
+            sudo rm /etc/resolv.conf
+            echo "nameserver 1.1.1.1" | sudo tee /etc/resolv.conf > /dev/null
+            printf "${GREEN}✔ systemd-resolved disabled, DNS set to 1.1.1.1${NC}\n"
+        else
+            printf "${RED}⚠ Pi-hole may fail to start. You'll need to fix port 53 manually.${NC}\n"
+        fi
+    fi
+    
     while true; do
         printf "${YELLOW}Set a password for Pi-hole: ${NC}"
         read -s PIHOLE_PASSWORD
@@ -964,6 +982,6 @@ printf "           http://$LOCAL_IP:3001  ->  Uptime Kuma\n"
 printf "           http://$LOCAL_IP:9000  ->  Portainer\n"
 echo ""
 printf "${CYAN}╔══════════════════════════════════════════╗${NC}\n"
-printf "${CYAN}║  Need help? github.com/endergate/labstart ║${NC}\n"
+printf "${CYAN}║ Need help? github.com/endergate/labstart ║${NC}\n"
 printf "${CYAN}╚══════════════════════════════════════════╝${NC}\n"
 echo ""
