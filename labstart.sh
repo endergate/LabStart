@@ -34,7 +34,7 @@ printf "This tool will generate a docker-compose.yml for your homelab.\n"
 printf "Answer the questions below and we'll build it for you.\n"
 echo ""
 
-sleep 10
+sleep 5
 
 
 
@@ -76,29 +76,65 @@ read DASHBOARD_TITLE
 LOCAL_IP=$(hostname -I | awk '{print $1}')
 
 printf "${YELLOW}Detected server IP: ${GREEN}$LOCAL_IP${NC}\n"
-printf "${YELLOW}Is this correct? [y/n]: ${NC}"
-read IP_CONFIRM
 
-if [ "$IP_CONFIRM" = "n" ] || [ "$IP_CONFIRM" = "N" ]; then
-    while true; do
-        printf "${YELLOW}Enter your server IP: ${NC}"
-        read LOCAL_IP
-        if [[ $LOCAL_IP =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
-            break
-        else
-            printf "${RED}Invalid IP address. Please use format: 0.0.0.0${NC}\n"
-        fi
-    done
-fi
+while true; do
+    printf "${YELLOW}Is this correct? [y/n]: ${NC}"
+    read IP_CONFIRM
+    case $IP_CONFIRM in
+        y|Y) break ;;
+        n|N)
+            while true; do
+                printf "${YELLOW}Enter your server IP: ${NC}"
+                read LOCAL_IP
+                if [[ $LOCAL_IP =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+                    break
+                else
+                    printf "${RED}Invalid IP. Please use format: 0.0.0.0${NC}\n"
+                fi
+            done
+            break ;;
+        *) printf "${RED}Please enter y or n.${NC}\n" ;;
+    esac
+done
 
 # Timezone
 
-printf "${YELLOW}Your timezone (e.g. America/New_York): ${NC}"
-read TIMEZONE
-[ -z "$TIMEZONE" ] && TIMEZONE="America/New_York"
+# Timezone
+echo ""
+printf "${CYAN}[ Timezone Setup ]${NC}\n"
+echo ""
+echo "  1) America/New_York     (Eastern)"
+echo "  2) America/Chicago      (Central)"
+echo "  3) America/Denver       (Mountain)"
+echo "  4) America/Los_Angeles  (Pacific)"
+echo "  5) Europe/London        (GMT)"
+echo "  6) Europe/Paris         (CET)"
+echo "  7) Asia/Tokyo           (JST)"
+echo "  8) Australia/Sydney     (AEST)"
+echo "  9) Enter manually"
+echo ""
 
-printf "${GREEN}✔ Got it!${NC} Setting up your lab...\n"
-sleep 1
+while true; do
+    printf "${YELLOW}Choose an option [1-9]: ${NC}"
+    read TZ_CHOICE
+    case $TZ_CHOICE in
+        1) TIMEZONE="America/New_York" ; break ;;
+        2) TIMEZONE="America/Chicago" ; break ;;
+        3) TIMEZONE="America/Denver" ; break ;;
+        4) TIMEZONE="America/Los_Angeles" ; break ;;
+        5) TIMEZONE="Europe/London" ; break ;;
+        6) TIMEZONE="Europe/Paris" ; break ;;
+        7) TIMEZONE="Asia/Tokyo" ; break ;;
+        8) TIMEZONE="Australia/Sydney" ; break ;;
+        9)
+            printf "${YELLOW}Enter your timezone (e.g. America/New_York): ${NC}"
+            read TIMEZONE
+            break ;;
+        *) printf "${RED}Invalid option. Please choose 1-9.${NC}\n" ;;
+    esac
+done
+
+printf "${GREEN}✔ Timezone set to $TIMEZONE${NC}\n"
 
 # -- DNS Blocker --
 echo ""
@@ -117,9 +153,42 @@ case $DNS_CHOICE in
     1) DNS="pihole"  ; break;;
     2) DNS="adguard"  ; break;;
     3) DNS="skip"  ; break ;;
-    *) printf "${RED}Invalid option. Please choose 1-3.${NC}\n" ;;
+ *) printf "${RED}Invalid option. Please choose 1-3.${NC}\n" ;;
     esac
 done
+
+# Pi-hole password setup
+if [ "$DNS" = "pihole" ]; then
+    echo ""
+    printf "${CYAN}[ Pi-hole Setup ]${NC}\n"
+    echo ""
+    while true; do
+        printf "${YELLOW}Set a password for Pi-hole: ${NC}"
+        read -s PIHOLE_PASSWORD
+        echo ""
+        printf "${YELLOW}Confirm password: ${NC}"
+        read -s PIHOLE_PASSWORD_CONFIRM
+        echo ""
+        if [ "$PIHOLE_PASSWORD" = "$PIHOLE_PASSWORD_CONFIRM" ]; then
+            break
+        else
+            printf "${RED}Passwords do not match. Try again.${NC}\n"
+        fi
+    done
+    printf "${GREEN}✔ Pi-hole password set!${NC}\n"
+fi
+
+# AdGuard reminder
+if [ "$DNS" = "adguard" ]; then
+    echo ""
+    printf "${CYAN}[ AdGuard Home Setup ]${NC}\n"
+    echo ""
+    printf "  AdGuard will ask you to create a password on first login.\n"
+    printf "  Visit: http://$LOCAL_IP:3000\n"
+    echo ""
+    printf "${YELLOW}Press Enter to continue...${NC}"
+    read
+fi
 
 printf "${GREEN}✔ Got it!${NC} Saving your choice...\n"
 sleep 2
@@ -171,6 +240,43 @@ case $MEDIA_CHOICE in
     esac
 done
 
+# Plex claim token
+if [ "$MEDIA" = "plex" ]; then
+    echo ""
+    printf "${CYAN}[ Plex Setup ]${NC}\n"
+    echo ""
+    printf "  Get your claim token from: ${YELLOW}https://plex.tv/claim${NC}\n"
+    printf "  It expires in 4 minutes so get it right before entering.\n"
+    echo ""
+    printf "${YELLOW}Enter your Plex claim token: ${NC}"
+    read PLEX_CLAIM
+    printf "${GREEN}✔ Plex token saved!${NC}\n"
+fi
+
+# Jellyfin reminder
+if [ "$MEDIA" = "jellyfin" ]; then
+    echo ""
+    printf "${CYAN}[ Jellyfin Setup ]${NC}\n"
+    echo ""
+    printf "  Jellyfin will ask you to create an admin account on first login.\n"
+    printf "  Visit: http://$LOCAL_IP:8096\n"
+    echo ""
+    printf "${YELLOW}Press Enter to continue...${NC}"
+    read
+fi
+
+# Emby reminder
+if [ "$MEDIA" = "emby" ]; then
+    echo ""
+    printf "${CYAN}[ Emby Setup ]${NC}\n"
+    echo ""
+    printf "  Emby will ask you to create an admin account on first login.\n"
+    printf "  Visit: http://$LOCAL_IP:8097\n"
+    echo ""
+    printf "${YELLOW}Press Enter to continue...${NC}"
+    read
+fi
+
 printf "${GREEN}✔ Got it!${NC} Saving your choice...\n"
 sleep 2
 
@@ -196,6 +302,44 @@ case $CONTAINER_CHOICE in
     *) printf "${RED}Invalid option. Please choose 1-4.${NC}\n" ;;
     esac
 done
+
+# Portainer reminder
+if [ "$CONTAINER" = "portainer" ]; then
+    echo ""
+    printf "${CYAN}[ Portainer Setup ]${NC}\n"
+    echo ""
+    printf "  Portainer will ask you to create an admin account on first login.\n"
+    printf "  Visit: http://$LOCAL_IP:9000\n"
+    printf "  ${RED}Note: You have 5 minutes to set up before it locks you out.${NC}\n"
+    echo ""
+    printf "${YELLOW}Press Enter to continue...${NC}"
+    read
+fi
+
+# Yacht reminder
+if [ "$CONTAINER" = "yacht" ]; then
+    echo ""
+    printf "${CYAN}[ Yacht Setup ]${NC}\n"
+    echo ""
+    printf "  Default credentials: admin@yacht.local / pass\n"
+    printf "  Visit: http://$LOCAL_IP:8001\n"
+    printf "  ${RED}Note: Change your password after first login!${NC}\n"
+    echo ""
+    printf "${YELLOW}Press Enter to continue...${NC}"
+    read
+fi
+
+# Komodo reminder
+if [ "$CONTAINER" = "komodo" ]; then
+    echo ""
+    printf "${CYAN}[ Komodo Setup ]${NC}\n"
+    echo ""
+    printf "  Komodo will ask you to create an account on first login.\n"
+    printf "  Visit: http://$LOCAL_IP:9120\n"
+    echo ""
+    printf "${YELLOW}Press Enter to continue...${NC}"
+    read
+fi
 
 printf "${GREEN}✔ Got it!${NC} Saving your choice...\n"
 sleep 2
@@ -225,6 +369,54 @@ case $VPN_CHOICE in
     esac
 done
 
+# WireGuard setup
+if [ "$VPN" = "wireguard" ]; then
+    echo ""
+    printf "${CYAN}[ WireGuard Setup ]${NC}\n"
+    echo ""
+    printf "${YELLOW}Enter your server domain or IP (e.g. vpn.yourdomain.com): ${NC}"
+    read WG_SERVER_URL
+    printf "${GREEN}✔ WireGuard server URL saved!${NC}\n"
+fi
+
+# Tailscale setup
+if [ "$VPN" = "tailscale" ]; then
+    echo ""
+    printf "${CYAN}[ Tailscale Setup ]${NC}\n"
+    echo ""
+    printf "  Get your auth key from: ${YELLOW}https://login.tailscale.com/admin/settings/keys${NC}\n"
+    echo ""
+    printf "${YELLOW}Enter your Tailscale auth key: ${NC}"
+    read TAILSCALE_AUTHKEY
+    printf "${GREEN}✔ Tailscale auth key saved!${NC}\n"
+fi
+
+# OpenVPN reminder
+if [ "$VPN" = "openvpn" ]; then
+    echo ""
+    printf "${CYAN}[ OpenVPN Setup ]${NC}\n"
+    echo ""
+    printf "  OpenVPN requires additional configuration after setup.\n"
+    printf "  Visit: http://$LOCAL_IP:943\n"
+    printf "  Check the README for full OpenVPN setup instructions.\n"
+    echo ""
+    printf "${YELLOW}Press Enter to continue...${NC}"
+    read
+fi
+
+# Headscale reminder
+if [ "$VPN" = "headscale" ]; then
+    echo ""
+    printf "${CYAN}[ Headscale Setup ]${NC}\n"
+    echo ""
+    printf "  Headscale requires CLI setup after install.\n"
+    printf "  Visit: http://$LOCAL_IP:8085\n"
+    printf "  Check the README for full Headscale setup instructions.\n"
+    echo ""
+    printf "${YELLOW}Press Enter to continue...${NC}"
+    read
+fi
+
 printf "${GREEN}✔ Got it!${NC} Saving your choice...\n"
 sleep 2
 
@@ -252,6 +444,64 @@ case $DDNS_CHOICE in
     *) printf "${RED}Invalid option. Please choose 1-5.${NC}\n" ;;
     esac
 done
+
+# Cloudflare DDNS setup
+if [ "$DDNS" = "cloudflare-ddns" ]; then
+    echo ""
+    printf "${CYAN}[ Cloudflare DDNS Setup ]${NC}\n"
+    echo ""
+    printf "  Get your API token from: ${YELLOW}https://dash.cloudflare.com/profile/api-tokens${NC}\n"
+    echo ""
+    printf "${YELLOW}Enter your Cloudflare API token: ${NC}"
+    read CF_API_TOKEN
+    printf "${YELLOW}Enter your domain (e.g. vpn.yourdomain.com): ${NC}"
+    read CF_DOMAIN
+    printf "${GREEN}✔ Cloudflare DDNS configured!${NC}\n"
+fi
+
+# DuckDNS setup
+if [ "$DDNS" = "duckdns" ]; then
+    echo ""
+    printf "${CYAN}[ DuckDNS Setup ]${NC}\n"
+    echo ""
+    printf "  Get your token from: ${YELLOW}https://www.duckdns.org${NC}\n"
+    echo ""
+    printf "${YELLOW}Enter your DuckDNS subdomain (e.g. myhomelab): ${NC}"
+    read DUCKDNS_SUBDOMAIN
+    printf "${YELLOW}Enter your DuckDNS token: ${NC}"
+    read DUCKDNS_TOKEN
+    printf "${GREEN}✔ DuckDNS configured!${NC}\n"
+fi
+
+# No-IP setup
+if [ "$DDNS" = "noip" ]; then
+    echo ""
+    printf "${CYAN}[ No-IP Setup ]${NC}\n"
+    echo ""
+    printf "${YELLOW}Enter your No-IP username: ${NC}"
+    read NOIP_USERNAME
+    printf "${YELLOW}Enter your No-IP password: ${NC}"
+    read -s NOIP_PASSWORD
+    echo ""
+    printf "${YELLOW}Enter your No-IP domain (e.g. myhomelab.ddns.net): ${NC}"
+    read NOIP_DOMAIN
+    printf "${GREEN}✔ No-IP configured!${NC}\n"
+fi
+
+# Dynu setup
+if [ "$DDNS" = "dynu" ]; then
+    echo ""
+    printf "${CYAN}[ Dynu Setup ]${NC}\n"
+    echo ""
+    printf "${YELLOW}Enter your Dynu username: ${NC}"
+    read DYNU_USERNAME
+    printf "${YELLOW}Enter your Dynu password: ${NC}"
+    read -s DYNU_PASSWORD
+    echo ""
+    printf "${YELLOW}Enter your Dynu domain (e.g. myhomelab.dynu.net): ${NC}"
+    read DYNU_DOMAIN
+    printf "${GREEN}✔ Dynu configured!${NC}\n"
+fi
 
 printf "${GREEN}✔ Got it!${NC} Saving your choice...\n"
 sleep 2
@@ -650,39 +900,39 @@ fi
 printf "\n${CYAN}Generating .env file...${NC}\n"
 sleep 1
 
-cat > $ENV_FILE << 'EOF'
+cat > $ENV_FILE << EOF
 # LabStart Environment Variables
-# Fill in the values below before running docker compose up -d
+# Generated by LabStart - do not share this file
 
 # Pi-hole
-PIHOLE_PASSWORD=changeme
+PIHOLE_PASSWORD=$PIHOLE_PASSWORD
 
 # Plex
-PLEX_CLAIM=yourclaim
+PLEX_CLAIM=$PLEX_CLAIM
 
 # WireGuard
-WG_SERVER_URL=yourdomain.com
+WG_SERVER_URL=$WG_SERVER_URL
 
 # Tailscale
-TAILSCALE_AUTHKEY=yourkey
+TAILSCALE_AUTHKEY=$TAILSCALE_AUTHKEY
 
 # Cloudflare DDNS
-CF_API_TOKEN=yourtoken
-CF_DOMAIN=yourdomain.com
+CF_API_TOKEN=$CF_API_TOKEN
+CF_DOMAIN=$CF_DOMAIN
 
 # DuckDNS
-DUCKDNS_SUBDOMAIN=yoursubdomain
-DUCKDNS_TOKEN=yourtoken
+DUCKDNS_SUBDOMAIN=$DUCKDNS_SUBDOMAIN
+DUCKDNS_TOKEN=$DUCKDNS_TOKEN
 
 # No-IP
-NOIP_USERNAME=yourusername
-NOIP_PASSWORD=yourpassword
-NOIP_DOMAIN=yourdomain.com
+NOIP_USERNAME=$NOIP_USERNAME
+NOIP_PASSWORD=$NOIP_PASSWORD
+NOIP_DOMAIN=$NOIP_DOMAIN
 
 # Dynu
-DYNU_USERNAME=yourusername
-DYNU_PASSWORD=yourpassword
-DYNU_DOMAIN=yourdomain.com
+DYNU_USERNAME=$DYNU_USERNAME
+DYNU_PASSWORD=$DYNU_PASSWORD
+DYNU_DOMAIN=$DYNU_DOMAIN
 EOF
 
 printf "${GREEN}✔ Created .env file${NC}\n"
@@ -705,20 +955,15 @@ printf "   + .env\n"
 echo ""
 printf "${CYAN}Next Steps:${NC}\n"
 echo ""
-printf "   ${YELLOW}Step 1${NC} - Fill in your credentials\n"
-printf "           nano .env\n"
-printf "           Replace all placeholder values with your real ones\n"
-printf "           Save: Ctrl+X then Y then Enter\n"
-echo ""
-printf "   ${YELLOW}Step 2${NC} - Start your homelab\n"
+printf "   ${YELLOW}Step 1${NC} - Start your homelab\n"
 printf "           docker compose up -d\n"
 echo ""
-printf "   ${YELLOW}Step 3${NC} - Open your browser\n"
-printf "           http://YOUR-SERVER-IP:4000  ->  Dashy\n"
-printf "           http://YOUR-SERVER-IP:3001  ->  Uptime Kuma\n"
-printf "           http://YOUR-SERVER-IP:9000  ->  Portainer\n"
+printf "   ${YELLOW}Step 2${NC} - Open your browser\n"
+printf "           http://$LOCAL_IP:4000  ->  Dashy\n"
+printf "           http://$LOCAL_IP:3001  ->  Uptime Kuma\n"
+printf "           http://$LOCAL_IP:9000  ->  Portainer\n"
 echo ""
 printf "${CYAN}╔══════════════════════════════════════════╗${NC}\n"
-printf "${CYAN}║Need help? github.com/endergate/labstart  ║${NC}\n"
+printf "${CYAN}║  Need help? github.com/endergate/labstart ║${NC}\n"
 printf "${CYAN}╚══════════════════════════════════════════╝${NC}\n"
 echo ""
