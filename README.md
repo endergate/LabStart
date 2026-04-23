@@ -21,11 +21,11 @@ chmod +x labstart.sh
 - DNS Blockers — Pi-hole, AdGuard Home
 - Monitoring — Uptime Kuma, Netdata
 - Media Servers — Jellyfin, Plex, Emby
-- Container Management — Portainer, Yacht, Komodo
+- Container Management — Portainer, Yacht
 - VPN — WireGuard, Tailscale, OpenVPN, Headscale
 - DDNS — Cloudflare, DuckDNS, No-IP, Dynu
 
-## 📚 Service Guides
+## Service Guides
 
 Some services require additional setup after installation:
 

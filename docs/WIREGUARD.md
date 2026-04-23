@@ -3,10 +3,10 @@
 WireGuard is a VPN that lets you securely access your homelab from anywhere. LabStart installs the WireGuard server, but you need to complete a few steps to connect your devices.
 
 ## What LabStart Does For You
-- ✅ Installs WireGuard server container
-- ✅ Generates server keys automatically
-- ✅ Creates your first client config
-- ✅ Shows QR code for mobile setup
+- Installs WireGuard server container
+- Generates server keys automatically
+- Creates your first client config
+- Shows QR code for mobile setup
 
 ## What You Need To Do
 
