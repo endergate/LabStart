@@ -981,6 +981,26 @@ if [ "$DOCKER_INSTALLED" = true ]; then
     fi
 fi
 
+# WireGuard post-install setup
+        if [ "$VPN" = "wireguard" ]; then
+            echo ""
+            printf "${CYAN}[ Setting up WireGuard ]${NC}\n"
+            sleep 5  # Wait for container to fully start
+            
+            printf "Generating client config...\n"
+            sudo docker exec wireguard /app/wg-quick add peer1
+            
+            echo ""
+            printf "${GREEN}✔ WireGuard is ready!${NC}\n"
+            printf "${CYAN}Scan this QR code with your mobile device:${NC}\n"
+            echo ""
+            sudo docker exec wireguard /app/show-peer peer1
+            echo ""
+            printf "Client config saved to: ${YELLOW}config/wireguard/peer1/peer1.conf${NC}\n"
+        fi
+    fi
+fi
+
 # --- Summary ---
 echo ""
 printf "${CYAN}╔══════════════════════════════════════════╗${NC}\n"
