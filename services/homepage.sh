@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # LabStart Service — Homepage
-# Feature-rich homelab dashboard
+# Dashboard for your homelab
 
 cat << 'COMPOSE'
   homepage:
@@ -10,5 +10,8 @@ cat << 'COMPOSE'
       - "3000:3000"
     volumes:
       - ./config/homepage:/app/config
+    environment:
+      - HOMEPAGE_ALLOWED_HOSTS=*
     restart: unless-stopped
+
 COMPOSE
