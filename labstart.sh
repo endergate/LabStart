@@ -565,7 +565,7 @@ EOF
       - title: Pi-hole
         description: Network ad blocker
         icon: hl-pihole
-        url: http://$LOCAL_IP:8080
+        url: http://$LOCAL_IP:8080/admin
         statusCheck: true
 EOF
 
@@ -714,7 +714,7 @@ EOF
     [ "$DNS" = "pihole" ] && cat >> $HOMEPAGE_CONFIG << EOF
     - Pi-hole:
         icon: pi-hole.png
-        href: http://$LOCAL_IP:8080
+        href: http://$LOCAL_IP:8080/admin
         description: Network ad blocker
 EOF
 
@@ -860,7 +860,7 @@ EOF
 EOF
     }
 
-    [ "$DNS" = "pihole" ] && add_homarr_tile "Pi-hole" "http://$LOCAL_IP:8080" "pi-hole"
+    [ "$DNS" = "pihole" ] && add_homarr_tile "Pi-hole" "http://$LOCAL_IP:8080/admin" "pi-hole"
     [ "$DNS" = "adguard" ] && add_homarr_tile "AdGuard Home" "http://$LOCAL_IP:3000" "adguard-home"
     [ "$MONITORING" = "uptime-kuma" ] && add_homarr_tile "Uptime Kuma" "http://$LOCAL_IP:3001" "uptime-kuma"
     [ "$MONITORING" = "netdata" ] && add_homarr_tile "Netdata" "http://$LOCAL_IP:19999" "netdata"
