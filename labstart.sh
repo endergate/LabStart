@@ -880,59 +880,23 @@ fi
 # --- Generate Homarr Config ---
 if [ "$DASHBOARD" = "homarr" ]; then
     printf "\n${CYAN}Generating Homarr config...${NC}\n"
-
-    HOMARR_CONFIG="config/homarr/default.json"
-    mkdir -p config/homarr
-
-    cat > $HOMARR_CONFIG << EOF
+    HOMARR_CONFIG="config/homarr/configs/default.json"
+    mkdir -p config/homarr/configs
+    
+    # Homarr uses JSON config - designed to be configured via web UI
+    # Glass theme is built-in by default
+    cat > $HOMARR_CONFIG << 'EOF'
 {
-  "name": "My Homelab",
-  "apps": [
-EOF
-
-    FIRST=true
-
-    add_homarr_tile() {
-        local name=$1
-        local url=$2
-        local icon=$3
-        if [ "$FIRST" = true ]; then
-            FIRST=false
-        else
-            echo "," >> $HOMARR_CONFIG
-        fi
-        cat >> $HOMARR_CONFIG << EOF
-    {
-      "name": "$name",
-      "url": "$url",
-      "icon": "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/$icon.png"
-    }
-EOF
-    }
-
-    [ "$DNS" = "pihole" ] && add_homarr_tile "Pi-hole" "http://$LOCAL_IP:8080/admin" "pi-hole"
-    [ "$DNS" = "adguard" ] && add_homarr_tile "AdGuard Home" "http://$LOCAL_IP:3000" "adguard-home"
-    [ "$MONITORING" = "uptime-kuma" ] && add_homarr_tile "Uptime Kuma" "http://$LOCAL_IP:3001" "uptime-kuma"
-    [ "$MONITORING" = "netdata" ] && add_homarr_tile "Netdata" "http://$LOCAL_IP:19999" "netdata"
-    [ "$MEDIA" = "jellyfin" ] && add_homarr_tile "Jellyfin" "http://$LOCAL_IP:8096" "jellyfin"
-    [ "$MEDIA" = "plex" ] && add_homarr_tile "Plex" "http://$LOCAL_IP:32400" "plex"
-    [ "$MEDIA" = "emby" ] && add_homarr_tile "Emby" "http://$LOCAL_IP:8097" "emby"
-    [ "$CONTAINER" = "portainer" ] && add_homarr_tile "Portainer" "http://$LOCAL_IP:9000" "portainer"
-    [ "$CONTAINER" = "yacht" ] && add_homarr_tile "Yacht" "http://$LOCAL_IP:8001" "yacht"
-    [ "$VPN" = "wireguard" ] && add_homarr_tile "WireGuard" "http://$LOCAL_IP:51821" "wireguard"
-    [ "$VPN" = "tailscale" ] && add_homarr_tile "Tailscale" "https://login.tailscale.com/admin" "tailscale"
-    [ "$VPN" = "headscale" ] && add_homarr_tile "Headscale" "http://$LOCAL_IP:8085" "headscale"
-    [ "$DDNS" = "cloudflare-ddns" ] && add_homarr_tile "Cloudflare DDNS" "https://dash.cloudflare.com" "cloudflare"
-    [ "$DDNS" = "duckdns" ] && add_homarr_tile "DuckDNS" "https://www.duckdns.org" "duckdns"
-    [ "$DDNS" = "noip" ] && add_homarr_tile "No-IP" "https://www.noip.com" "noip"
-    [ "$DDNS" = "dynu" ] && add_homarr_tile "Dynu" "https://www.dynu.com" "dynu"
-
-    cat >> $HOMARR_CONFIG << EOF
-  ]
+  "schemaVersion": 1,
+  "configProperties": {
+    "name": "My Homelab"
+  },
+  "categories": []
 }
 EOF
 
     printf "${GREEN}✔ Homarr config generated at $HOMARR_CONFIG${NC}\n"
+    printf "${YELLOW}  Note: Homarr is best configured through its web UI at http://$LOCAL_IP:7575${NC}\n"
 fi
 
 # --- Generate .env file ---
