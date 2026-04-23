@@ -930,6 +930,34 @@ EOF
 printf "${GREEN}✔ Created .env file${NC}\n"
 sleep 2
 
+# --- Auto-Install Docker and Start Services ---
+echo ""
+printf "${CYAN}[ Docker Setup ]${NC}\n"
+
+# Check if Docker is installed
+if ! command -v docker &> /dev/null; then
+    printf "${YELLOW}Docker is not installed.${NC}\n"
+    printf "${YELLOW}Would you like LabStart to install Docker now? [y/n]: ${NC}"
+    read INSTALL_DOCKER
+    
+    if [ "$INSTALL_DOCKER" = "y" ] || [ "$INSTALL_DOCKER" = "Y" ]; then
+        printf "${CYAN}Installing Docker...${NC}\n"
+        sudo apt update
+        sudo apt install -y docker.io docker-compose
+        sudo systemctl enable docker
+        sudo systemctl start docker
+        sudo usermod -aG docker $USER
+        printf "${GREEN}✔ Docker installed successfully!${NC}\n"
+        DOCKER_INSTALLED=true
+    else
+        printf "${RED}⚠ Skipping Docker installation. You'll need to install it manually.${NC}\n"
+        DOCKER_INSTALLED=false
+    fi
+else
+    printf "${GREEN}✔ Docker is already installed${NC}\n"
+    DOCKER_INSTALLED=true
+fi
+
 # Start containers if Docker is installed
 if [ "$DOCKER_INSTALLED" = true ]; then
     echo ""
