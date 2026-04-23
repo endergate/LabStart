@@ -435,8 +435,7 @@ echo ""
 echo "  1) Cloudflare DDNS"
 echo "  2) DuckDNS"
 echo "  3) No-IP"
-echo "  4) Dynu"
-echo "  5) Skip"
+echo "  4) Skip"
 echo ""
 
 while true; do
@@ -446,8 +445,7 @@ case $DDNS_CHOICE in
     1) DDNS="cloudflare-ddns"  ; break;;
     2) DDNS="duckdns"  ; break;;
     3) DDNS="noip"  ; break;;
-    4) DDNS="dynu"  ; break;;
-    5) DDNS="skip"  ; break;;
+    4) DDNS="skip"  ; break;;
     *) printf "${RED}Invalid option. Please choose 1-5.${NC}\n" ;;
     esac
 done
@@ -494,24 +492,6 @@ if [ "$DDNS" = "noip" ]; then
     read NOIP_DOMAIN
     printf "${GREEN}✔ No-IP configured!${NC}\n"
 fi
-
-# Dynu setup
-if [ "$DDNS" = "dynu" ]; then
-    echo ""
-    printf "${CYAN}[ Dynu Setup ]${NC}\n"
-    echo ""
-    printf "${YELLOW}Enter your Dynu username: ${NC}"
-    read DYNU_USERNAME
-    printf "${YELLOW}Enter your Dynu password: ${NC}"
-    read -s DYNU_PASSWORD
-    echo ""
-    printf "${YELLOW}Enter your Dynu domain (e.g. myhomelab.dynu.net): ${NC}"
-    read DYNU_DOMAIN
-    printf "${GREEN}✔ Dynu configured!${NC}\n"
-fi
-
-printf "${GREEN}✔ Got it!${NC} Saving your choice...\n"
-sleep 2
 
 # --- Generate docker-compose.yml ---
 printf "\n${CYAN}Generating your homelab...${NC}\n"
@@ -932,10 +912,6 @@ NOIP_USERNAME=$NOIP_USERNAME
 NOIP_PASSWORD=$NOIP_PASSWORD
 NOIP_DOMAIN=$NOIP_DOMAIN
 
-# Dynu
-DYNU_USERNAME=$DYNU_USERNAME
-DYNU_PASSWORD=$DYNU_PASSWORD
-DYNU_DOMAIN=$DYNU_DOMAIN
 EOF
 
 printf "${GREEN}✔ Created .env file${NC}\n"
