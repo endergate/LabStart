@@ -305,7 +305,6 @@ echo "Easily manage your  Docker containers with a web interface."
 echo ""
 echo "  1) Portainer"
 echo "  2) Yacht"
-echo "  3) Komodo"
 echo "  4) Skip"
 echo ""
 
@@ -314,8 +313,7 @@ printf "${YELLOW}Choose an option [1-4]: ${NC}"
 read CONTAINER_CHOICE
 case $CONTAINER_CHOICE in
     1) CONTAINER="portainer"  ; break;;
-    2) CONTAINER="yacht"  ; break;;
-    3) CONTAINER="komodo"  ; break;;
+    2) CONTAINER="yacht"  ; break; 
     4) CONTAINER="skip"  ; break;;
     *) printf "${RED}Invalid option. Please choose 1-4.${NC}\n" ;;
     esac
@@ -342,18 +340,6 @@ if [ "$CONTAINER" = "yacht" ]; then
     printf "  Default credentials: admin@yacht.local / pass\n"
     printf "  Visit: http://$LOCAL_IP:8001\n"
     printf "  ${RED}Note: Change your password after first login!${NC}\n"
-    echo ""
-    printf "${YELLOW}Press Enter to continue...${NC}"
-    read
-fi
-
-# Komodo reminder
-if [ "$CONTAINER" = "komodo" ]; then
-    echo ""
-    printf "${CYAN}[ Komodo Setup ]${NC}\n"
-    echo ""
-    printf "  Komodo will ask you to create an account on first login.\n"
-    printf "  Visit: http://$LOCAL_IP:9120\n"
     echo ""
     printf "${YELLOW}Press Enter to continue...${NC}"
     read
@@ -647,14 +633,6 @@ EOF
         statusCheck: true
 EOF
 
-    [ "$CONTAINER" = "komodo" ] && cat >> $DASHY_CONFIG << EOF
-      - title: Komodo
-        description: Container management
-        icon: si-komodo
-        url: http://$LOCAL_IP:9120
-        statusCheck: true
-EOF
-
     [ "$VPN" = "wireguard" ] && cat >> $DASHY_CONFIG << EOF
       - title: WireGuard
         description: VPN - Port 51820/udp
@@ -794,13 +772,7 @@ EOF
         icon: yacht.png
         href: http://$LOCAL_IP:8001
         description: Container management
-EOF
 
-    [ "$CONTAINER" = "komodo" ] && cat >> $HOMEPAGE_CONFIG << EOF
-    - Komodo:
-        icon: komodo.png
-        href: http://$LOCAL_IP:9120
-        description: Container management
 EOF
 
     [ "$VPN" = "wireguard" ] && cat >> $HOMEPAGE_CONFIG << EOF
@@ -897,7 +869,6 @@ EOF
     [ "$MEDIA" = "emby" ] && add_homarr_tile "Emby" "http://$LOCAL_IP:8097" "emby"
     [ "$CONTAINER" = "portainer" ] && add_homarr_tile "Portainer" "http://$LOCAL_IP:9000" "portainer"
     [ "$CONTAINER" = "yacht" ] && add_homarr_tile "Yacht" "http://$LOCAL_IP:8001" "yacht"
-    [ "$CONTAINER" = "komodo" ] && add_homarr_tile "Komodo" "http://$LOCAL_IP:9120" "komodo"
     [ "$VPN" = "wireguard" ] && add_homarr_tile "WireGuard" "http://$LOCAL_IP:51821" "wireguard"
     [ "$VPN" = "tailscale" ] && add_homarr_tile "Tailscale" "https://login.tailscale.com/admin" "tailscale"
     [ "$VPN" = "headscale" ] && add_homarr_tile "Headscale" "http://$LOCAL_IP:8085" "headscale"
