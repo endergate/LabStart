@@ -25,6 +25,12 @@ chmod +x labstart.sh
 - VPN — WireGuard, Tailscale, OpenVPN, Headscale
 - DDNS — Cloudflare, DuckDNS, No-IP, Dynu
 
+## 📚 Service Guides
+
+Some services require additional setup after installation:
+
+- **[WireGuard VPN Setup](docs/WIREGUARD.md)** - Complete guide for connecting devices to your VPN
+
 ## Requirements
 
 - Linux (Ubuntu, Debian, Fedora, Arch)
