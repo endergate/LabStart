@@ -378,11 +378,14 @@ if [ "$VPN" = "wireguard" ]; then
     echo ""
     printf "${CYAN}[ WireGuard Setup ]${NC}\n"
     echo ""
+    printf "  ${YELLOW}⚠ WireGuard has no web UI${NC}\n"
+    printf "  Configuration requires CLI setup.\n"
+    printf "  Full guide: ${CYAN}https://github.com/endergate/LabStart#wireguard-setup${NC}\n"
+    echo ""
     printf "${YELLOW}Enter your server domain or IP (e.g. vpn.yourdomain.com): ${NC}"
     read WG_SERVER_URL
     printf "${GREEN}✔ WireGuard server URL saved!${NC}\n"
 fi
-
 # Tailscale setup
 if [ "$VPN" = "tailscale" ]; then
     echo ""
