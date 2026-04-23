@@ -313,8 +313,8 @@ printf "${YELLOW}Choose an option [1-4]: ${NC}"
 read CONTAINER_CHOICE
 case $CONTAINER_CHOICE in
     1) CONTAINER="portainer"  ; break;;
-    2) CONTAINER="yacht"  ; break; 
-    4) CONTAINER="skip"  ; break;;
+    2) CONTAINER="yacht"  ; break;;
+    3) CONTAINER="skip"  ; break;;
     *) printf "${RED}Invalid option. Please choose 1-4.${NC}\n" ;;
     esac
 done
