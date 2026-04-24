@@ -26,16 +26,35 @@ echo "========================================"
 echo "  Let's build your homelab!"
 echo "========================================"
 echo ""
-sleep 4
+sleep 2
 
 printf "${NC}\n"
-printf "${CYAN}Welcome to LabStart - Your Homelab Setup Wizard!${NC}\n"
-printf "This tool will generate a docker-compose.yml for your homelab.\n"
-printf "Answer the questions below and we'll build it for you.\n"
+printf "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}\n"
+printf "${CYAN}║     Welcome to LabStart - Your Homelab Setup Wizard!     ║${NC}\n"
+printf "${CYAN}╚══════════════════════════════════════════════════════════╝${NC}\n"
 echo ""
+sleep 1
 
-sleep 5
-
+printf "${YELLOW}We will set up a simple homelab for you as you start!${NC}\n"
+printf "This Homelab Wizard will include some of these services as you start your journey:\n"
+printf "  • ${GREEN}Ad blockers${NC} (Pi-hole, AdGuard)\n"
+printf "  • ${GREEN}Media servers${NC} (Plex, Jellyfin, Emby)\n"
+printf "  • ${GREEN}Monitoring tools${NC} (Uptime Kuma, Netdata)\n"
+printf "  • ${GREEN}VPNs${NC} (WireGuard, Tailscale)\n"
+printf "  • ${GREEN}And more!${NC}\n"
+echo ""
+printf "${YELLOW}What does LabStart do?${NC}\n"
+printf "This wizard will:\n"
+printf "  ${GREEN}✓${NC} Ask what services you want\n"
+printf "  ${GREEN}✓${NC} Auto-generate all config files (no coding needed)\n"
+printf "  ${GREEN}✓${NC} Set up a beautiful dashboard to access everything\n"
+printf "  ${GREEN}✓${NC} Install Docker if you don't have it\n"
+printf "  ${GREEN}✓${NC} Start all your services automatically\n"
+echo ""
+printf "${CYAN}Takes about 5 minutes. Let's get started!${NC}\n"
+echo ""
+printf "Press Enter to begin...\n"
+read
 
 
 # -- Dashboard Selection --
