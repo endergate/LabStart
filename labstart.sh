@@ -1087,17 +1087,83 @@ printf "   + .env\n"
 [ "$DASHBOARD" = "homepage" ] && printf "   + config/homepage/\n"
 [ "$DASHBOARD" = "homarr" ] && printf "   + config/homarr/\n"
 echo ""
-printf "${CYAN}Next Steps:${NC}\n"
+
+printf "${CYAN}═══════════════════════════════════════════${NC}\n"
+printf "${CYAN}INSTALLED SERVICES${NC}\n"
+printf "${CYAN}═══════════════════════════════════════════${NC}\n"
 echo ""
-printf "   ${YELLOW}Step 1${NC} - Start your homelab\n"
-printf "           docker compose up -d\n"
+
+# Dashboard Section
+if [ "$DASHBOARD" != "skip" ]; then
+    printf "${YELLOW}📊 Dashboard${NC}\n"
+    [ "$DASHBOARD" = "dashy" ] && printf "   Dashy              → http://$LOCAL_IP:4000\n"
+    [ "$DASHBOARD" = "homepage" ] && printf "   Homepage           → http://$LOCAL_IP:3000\n"
+    [ "$DASHBOARD" = "homarr" ] && printf "   Homarr             → http://$LOCAL_IP:7575\n"
+    echo ""
+fi
+
+# Security Section
+if [ "$DNS" != "skip" ]; then
+    printf "${YELLOW}🛡️  Security${NC}\n"
+    [ "$DNS" = "pihole" ] && printf "   Pi-hole            → http://$LOCAL_IP:8080/admin\n"
+    [ "$DNS" = "adguard" ] && printf "   AdGuard Home       → http://$LOCAL_IP:3000\n"
+    echo ""
+fi
+
+# Monitoring Section
+if [ "$MONITORING" != "skip" ]; then
+    printf "${YELLOW}📈 Monitoring${NC}\n"
+    [ "$MONITORING" = "uptime-kuma" ] && printf "   Uptime Kuma        → http://$LOCAL_IP:3001\n"
+    [ "$MONITORING" = "netdata" ] && printf "   Netdata            → http://$LOCAL_IP:19999\n"
+    echo ""
+fi
+
+# Media Section
+if [ "$MEDIA" != "skip" ]; then
+    printf "${YELLOW}🎬 Media${NC}\n"
+    [ "$MEDIA" = "jellyfin" ] && printf "   Jellyfin           → http://$LOCAL_IP:8096\n"
+    [ "$MEDIA" = "plex" ] && printf "   Plex               → http://$LOCAL_IP:32400\n"
+    [ "$MEDIA" = "emby" ] && printf "   Emby               → http://$LOCAL_IP:8097\n"
+    echo ""
+fi
+
+# Management Section
+if [ "$CONTAINER" != "skip" ]; then
+    printf "${YELLOW}🐳 Container Management${NC}\n"
+    [ "$CONTAINER" = "portainer" ] && printf "   Portainer          → http://$LOCAL_IP:9000\n"
+    [ "$CONTAINER" = "yacht" ] && printf "   Yacht              → http://$LOCAL_IP:8001\n"
+    echo ""
+fi
+
+# Network Section
+if [ "$VPN" != "skip" ] || [ "$DDNS" != "skip" ]; then
+    printf "${YELLOW}🌐 Network${NC}\n"
+    [ "$VPN" = "tailscale" ] && printf "   Tailscale          → https://login.tailscale.com/admin\n"
+    [ "$VPN" = "wireguard" ] && printf "   WireGuard          → See setup guide (CLI only)\n"
+    [ "$VPN" = "openvpn" ] && printf "   OpenVPN            → See setup guide (CLI only)\n"
+    [ "$VPN" = "headscale" ] && printf "   Headscale          → See setup guide (CLI only)\n"
+    [ "$DDNS" = "cloudflare-ddns" ] && printf "   Cloudflare DDNS    → https://dash.cloudflare.com\n"
+    [ "$DDNS" = "duckdns" ] && printf "   DuckDNS            → https://www.duckdns.org\n"
+    [ "$DDNS" = "noip" ] && printf "   No-IP              → https://www.noip.com\n"
+    echo ""
+fi
+
+printf "${CYAN}═══════════════════════════════════════════${NC}\n"
 echo ""
-printf "   ${YELLOW}Step 2${NC} - Open your browser\n"
-printf "           http://$LOCAL_IP:4000  ->  Dashy\n"
-printf "           http://$LOCAL_IP:3001  ->  Uptime Kuma\n"
-printf "           http://$LOCAL_IP:9000  ->  Portainer\n"
+printf "${CYAN}🚀 Quick Start:${NC}\n"
+[ "$DASHBOARD" = "dashy" ] && printf "   Open your dashboard: ${GREEN}http://$LOCAL_IP:4000${NC}\n"
+[ "$DASHBOARD" = "homepage" ] && printf "   Open your dashboard: ${GREEN}http://$LOCAL_IP:3000${NC}\n"
+[ "$DASHBOARD" = "homarr" ] && printf "   Open your dashboard: ${GREEN}http://$LOCAL_IP:7575${NC}\n"
+echo ""
+printf "${YELLOW}⚠  Services may take 5-10 minutes to fully start${NC}\n"
+printf "${YELLOW}   If a service doesn't load, wait and refresh your browser${NC}\n"
+echo ""
+printf "${CYAN}Troubleshooting:${NC}\n"
+printf "   Check status:  ${GREEN}docker ps${NC}\n"
+printf "   View logs:     ${GREEN}docker logs <container-name>${NC}\n"
+printf "   Get help:      ${CYAN}github.com/endergate/LabStart${NC}\n"
 echo ""
 printf "${CYAN}╔══════════════════════════════════════════╗${NC}\n"
-printf "${CYAN}║ Need help? github.com/endergate/labstart ║${NC}\n"
+printf "${CYAN}║    Thank you for using LabStart! 🚀      ║${NC}\n"
 printf "${CYAN}╚══════════════════════════════════════════╝${NC}\n"
 echo ""
