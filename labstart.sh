@@ -1019,6 +1019,37 @@ if [ "$DOCKER_INSTALLED" = true ]; then
             echo ""
             printf "Client config saved to: ${YELLOW}config/wireguard/peer1/peer1.conf${NC}\n"
         fi
+        
+        # Homarr setup instructions
+        if [ "$DASHBOARD" = "homarr" ]; then
+            echo ""
+            printf "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}\n"
+            printf "${CYAN}║          HOMARR SETUP INSTRUCTIONS                       ║${NC}\n"
+            printf "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}\n"
+            echo ""
+            printf "${YELLOW}Homarr requires manual tile setup after creating your account.${NC}\n"
+            echo ""
+            printf "1. Open Homarr: ${CYAN}http://$LOCAL_IP:7575${NC}\n"
+            printf "2. Create your admin account\n"
+            printf "3. Click Settings (gear icon) → Add tiles\n"
+            printf "4. Add your services using these URLs:\n"
+            echo ""
+            [ "$DNS" = "pihole" ] && printf "   ${GREEN}Pi-hole:${NC}       http://$LOCAL_IP:8080/admin\n"
+            [ "$DNS" = "adguard" ] && printf "   ${GREEN}AdGuard Home:${NC}  http://$LOCAL_IP:3000\n"
+            [ "$MONITORING" = "uptime-kuma" ] && printf "   ${GREEN}Uptime Kuma:${NC}   http://$LOCAL_IP:3001\n"
+            [ "$MONITORING" = "netdata" ] && printf "   ${GREEN}Netdata:${NC}       http://$LOCAL_IP:19999\n"
+            [ "$MEDIA" = "jellyfin" ] && printf "   ${GREEN}Jellyfin:${NC}      http://$LOCAL_IP:8096\n"
+            [ "$MEDIA" = "plex" ] && printf "   ${GREEN}Plex:${NC}          http://$LOCAL_IP:32400\n"
+            [ "$MEDIA" = "emby" ] && printf "   ${GREEN}Emby:${NC}          http://$LOCAL_IP:8097\n"
+            [ "$CONTAINER" = "portainer" ] && printf "   ${GREEN}Portainer:${NC}     http://$LOCAL_IP:9000\n"
+            [ "$CONTAINER" = "yacht" ] && printf "   ${GREEN}Yacht:${NC}         http://$LOCAL_IP:8001\n"
+            echo ""
+            printf "${YELLOW}Full setup guide:${NC} https://github.com/endergate/LabStart/blob/main/docs/HOMARR.md\n"
+            printf "${YELLOW}Homarr documentation:${NC} https://homarr.dev/docs\n"
+            echo ""
+            printf "${CYAN}╚══════════════════════════════════════════════════════════╝${NC}\n"
+            echo ""
+        fi
     fi
 fi
 
