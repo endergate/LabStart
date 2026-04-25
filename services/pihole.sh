@@ -11,7 +11,7 @@ cat << 'COMPOSE'
       - "53:53/udp"
       - "8080:80"
     environment:
-      - WEBPASSWORD=${PIHOLE_PASSWORD}
+      - FTLCONF_webserver_api_password=${PIHOLE_PASSWORD}
     volumes:
       - ./config/pihole:/etc/pihole
     restart: unless-stopped
