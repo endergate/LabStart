@@ -1002,7 +1002,7 @@ if ! command -v docker &> /dev/null; then
             sleep 2
         done
         
-       DOCKER_INSTALLED=true
+        DOCKER_INSTALLED=true
     else
         printf "${RED}⚠ Skipping Docker installation. You'll need to install it manually.${NC}\n"
         DOCKER_INSTALLED=false
