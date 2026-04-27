@@ -990,15 +990,19 @@ if ! command -v docker &> /dev/null; then
         sudo systemctl start docker
         sudo usermod -aG docker $USER
         printf "${GREEN}✔ Docker installed successfully!${NC}\n"
+        
+        # Wait for Docker to be ready
+        printf "${CYAN}Waiting for Docker to start...${NC}\n"
+        sleep 5
+        for i in {1..10}; do
+            if sudo systemctl is-active --quiet docker; then
+                printf "${GREEN}✔ Docker is ready!${NC}\n"
+                break
+            fi
+            sleep 2
+        done
+        
         DOCKER_INSTALLED=true
-    else
-        printf "${RED}⚠ Skipping Docker installation. You'll need to install it manually.${NC}\n"
-        DOCKER_INSTALLED=false
-    fi
-else
-    printf "${GREEN}✔ Docker is already installed${NC}\n"
-    DOCKER_INSTALLED=true
-fi
 
 # Start containers if Docker is installed
 if [ "$DOCKER_INSTALLED" = true ]; then
