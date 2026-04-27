@@ -996,6 +996,7 @@ if ! command -v docker &> /dev/null; then
         sudo systemctl start docker
         
         sudo usermod -aG docker $USER
+        
 # Wait for Docker to be ready
         printf "${CYAN}Waiting for Docker to start...${NC}\n"
         sleep 5
