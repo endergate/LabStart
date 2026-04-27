@@ -987,10 +987,15 @@ if ! command -v docker &> /dev/null; then
         sudo apt update
         sudo apt install -y docker.io docker-compose
         sudo systemctl enable docker
-        sudo systemctl start docker
-        sudo usermod -aG docker $USER
-        printf "${GREEN}✔ Docker installed successfully!${NC}\n"
         
+        # Fix common Docker startup issues
+        printf "${CYAN}Configuring Docker...${NC}\n"
+        sudo systemctl stop docker 2>/dev/null
+        sudo systemctl stop docker.socket 2>/dev/null
+        sudo systemctl start docker.socket
+        sudo systemctl start docker
+        
+        sudo usermod -aG docker $USER
 # Wait for Docker to be ready
         printf "${CYAN}Waiting for Docker to start...${NC}\n"
         sleep 5
