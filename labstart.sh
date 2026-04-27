@@ -517,7 +517,7 @@ printf "\n${CYAN}Generating your homelab...${NC}\n"
 sleep 2
 
 # Write the header
-cat > $COMPOSE_FILE << 'EOF'
+cat > $COMPOSE_FILE << EOF
 services:
 EOF
 
@@ -548,9 +548,9 @@ if [ "$DASHBOARD" = "dashy" ]; then
     DASHY_CONFIG="config/dashy/conf.yml"
     mkdir -p config/dashy
     
-    cat > $DASHY_CONFIG << 'EOF'
+    cat > $DASHY_CONFIG << EOF
 pageInfo:
-  title: My Homelab
+  title: $DASHBOARD_TITLE
   description: Powered by LabStart
 appConfig:
   theme: material-glass
@@ -713,8 +713,8 @@ if [ "$DASHBOARD" = "homepage" ]; then
     mkdir -p config/homepage
     
     # Generate settings.yaml with glass theme
-    cat > config/homepage/settings.yaml << 'EOF'
-title: My Homelab
+    cat > config/homepage/settings.yaml << EOF
+title: $DASHBOARD_TITLES
 favicon: https://gethomepage.dev/img/icon.png
 theme: dark
 color: slate
@@ -739,7 +739,7 @@ EOF
 
     # Generate services.yaml with organized sections
     HOMEPAGE_CONFIG="config/homepage/services.yaml"
-    cat > $HOMEPAGE_CONFIG << 'EOF'
+    cat > $HOMEPAGE_CONFIG << EOF
 EOF
 
     # Monitoring Section
