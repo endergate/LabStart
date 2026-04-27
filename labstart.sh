@@ -991,18 +991,27 @@ if ! command -v docker &> /dev/null; then
         sudo usermod -aG docker $USER
         printf "${GREEN}✔ Docker installed successfully!${NC}\n"
         
-        # Wait for Docker to be ready
+# Wait for Docker to be ready
         printf "${CYAN}Waiting for Docker to start...${NC}\n"
         sleep 5
-        for i in {1..10}; do
-            if sudo systemctl is-active --quiet docker; then
+        RETRIES=0
+        MAX_RETRIES=15
+        while [ $RETRIES -lt $MAX_RETRIES ]; do
+            if sudo docker info &>/dev/null; then
                 printf "${GREEN}✔ Docker is ready!${NC}\n"
                 break
             fi
-            sleep 2
+            RETRIES=$((RETRIES + 1))
+            printf "  Attempt $RETRIES/$MAX_RETRIES...\n"
+            sleep 3
         done
         
-        DOCKER_INSTALLED=true
+        if [ $RETRIES -eq $MAX_RETRIES ]; then
+            printf "${RED}⚠ Docker failed to start. Please check logs with: sudo journalctl -xeu docker.service${NC}\n"
+            DOCKER_INSTALLED=false
+        else
+            DOCKER_INSTALLED=true
+        fi
     else
         printf "${RED}⚠ Skipping Docker installation. You'll need to install it manually.${NC}\n"
         DOCKER_INSTALLED=false
