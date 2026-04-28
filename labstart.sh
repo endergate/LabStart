@@ -601,7 +601,7 @@ EOF
         [ "$DNS" = "pihole" ] && cat >> $DASHY_CONFIG << EOF
       - title: Pi-hole
         description: Network-wide ad blocking
-        icon: hl-pihole
+        icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/pi-hole.png
         url: http://$LOCAL_IP:8080/admin
         statusCheck: true
 EOF
