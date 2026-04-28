@@ -1,4 +1,4 @@
-# LabStart
+# LabStart 2.0
 
 **An interactive CLI wizard that generates a ready-to-run homelab in 5 minutes.**
 
