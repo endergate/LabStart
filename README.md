@@ -152,7 +152,16 @@ git pull
 
 ## 🖥️ System Requirements
 
-- **OS**: Ubuntu 20.04+, Debian 11+, or similar Linux distribution
+**Supported Operating Systems:**
+- Ubuntu 20.04+ (tested on 24.04)
+- Debian 11+
+- Linux Mint
+- Pop!_OS
+- Other Debian-based distributions with `apt` and `systemd`
+
+> **Note:** LabStart currently supports Debian-based systems only. Support for RedHat/Fedora, Arch Linux, and other distributions is planned for future releases.
+
+**Hardware:**
 - **RAM**: 2GB minimum (4GB+ recommended)
 - **Disk**: 20GB+ free space (more for media servers)
 - **Network**: Static IP recommended for reliable access
