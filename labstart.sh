@@ -1051,19 +1051,16 @@ if [ "$DOCKER_INSTALLED" = true ]; then
         # WireGuard post-install setup
         if [ "$VPN" = "wireguard" ]; then
             echo ""
-            printf "${CYAN}[ Setting up WireGuard ]${NC}\n"
-            sleep 5  # Wait for container to fully start
-            
-            printf "Generating client config...\n"
-            sudo docker exec wireguard /app/wg-quick add peer1
-            
+            printf "${CYAN}[ WireGuard Setup ]${NC}\n"
+            printf "WireGuard automatically generated a peer on first start.\n"
             echo ""
-            printf "${GREEN}✔ WireGuard is ready!${NC}\n"
-            printf "${CYAN}Scan this QR code with your mobile device:${NC}\n"
-            echo ""
-            sudo docker exec wireguard /app/show-peer peer1
+            printf "${CYAN}View the QR code:${NC}\n"
+            sudo docker logs wireguard | grep -A 35 "PEER 1 QR code"
             echo ""
             printf "Client config saved to: ${YELLOW}config/wireguard/peer1/peer1.conf${NC}\n"
+            printf "Server URL: ${YELLOW}${WG_SERVER_URL}:51820${NC}\n"
+            printf "${YELLOW}Press Enter to continue...${NC}"
+            read
         fi
         
         # Homarr setup instructions
