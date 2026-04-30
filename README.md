@@ -49,8 +49,25 @@ The wizard will guide you through the rest. Takes about 5 minutes.
 
 ---
 
-## 🆚 Why LabStart?
+## 📸 What You Get
 
+**Setup Wizard:**
+![Setup Wizard](screenshots/setup.png)
+
+**Terminal Output:**
+![LabStart Output](screenshots/output.png)
+
+**Dashy Dashboard:**
+![Dashy](screenshots/dashy.png)
+
+**Homepage Dashboard:**
+![Homepage](screenshots/homepage.png)
+
+In 5 minutes, you go from empty server to fully configured homelab with all services ready to use.
+
+---
+
+## 🆚 Why LabStart?
 | Manual Setup | LabStart |
 |--------------|----------|
 | Learn Docker, YAML syntax | Answer simple questions |
