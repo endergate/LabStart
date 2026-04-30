@@ -52,16 +52,20 @@ The wizard will guide you through the rest. Takes about 5 minutes.
 ## 📸 What You Get
 
 **Setup Wizard:**
-![Setup Wizard](screenshots/setup.png)
+
+<img src="screenshots/setup.png" width="600">
 
 **Terminal Output:**
-![LabStart Output](screenshots/output.png)
+
+<img src="screenshots/output.png" width="600">
 
 **Dashy Dashboard:**
-![Dashy](screenshots/dashy.png)
+
+<img src="screenshots/dashy.png" width="600">
 
 **Homepage Dashboard:**
-![Homepage](screenshots/homepage.png)
+
+<img src="screenshots/homepage.png" width="600">
 
 In 5 minutes, you go from empty server to fully configured homelab with all services ready to use.
 
