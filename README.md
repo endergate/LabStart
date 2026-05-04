@@ -79,7 +79,7 @@ In 5 minutes, you go from empty server to fully configured homelab with all serv
 | Configure dashboards manually | Pre-configured with organized sections |
 | Debug port conflicts | Auto-detects and fixes (Pi-hole) |
 | Research each service's setup | Step-by-step wizard with explanations |
-| 2-3 hours setup time | 5 minutes |
+| 2-3 hours setup time | 5 - 10 minutes |
 
 ---
 
@@ -176,6 +176,7 @@ git pull
 **Supported Operating Systems:**
 - Ubuntu 20.04+ (tested on 24.04)
 - Debian 11+
+- **Raspberry Pi OS (64-bit) - tested on Pi 4/5** ✅
 - Linux Mint
 - Pop!_OS
 - Other Debian-based distributions with `apt` and `systemd`
@@ -183,9 +184,10 @@ git pull
 > **Note:** LabStart currently supports Debian-based systems only. Support for RedHat/Fedora, Arch Linux, and other distributions is planned for future releases.
 
 **Hardware:**
-- **RAM**: 2GB minimum (4GB+ recommended)
+- **RAM**: 2GB minimum (4GB+ recommended, 8GB+ for media servers)
 - **Disk**: 20GB+ free space (more for media servers)
 - **Network**: Static IP recommended for reliable access
+- **Raspberry Pi**: Pi 4 (4GB+) or Pi 5 recommended for best performance
 
 LabStart will install Docker and Docker Compose for you if they're not already installed.
 
