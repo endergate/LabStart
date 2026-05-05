@@ -2,6 +2,11 @@
 
 **An interactive CLI wizard that generates a ready-to-run homelab in 5 minutes.**
 
+![GitHub Release](https://img.shields.io/github/v/release/endergate/LabStart?color=blue)
+![GitHub Issues](https://img.shields.io/github/issues/endergate/LabStart)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/endergate/LabStart)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/endergate/LabStart)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/endergate/LabStart)](https://github.com/endergate/LabStart/stargazers)
 
