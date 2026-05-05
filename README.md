@@ -10,7 +10,6 @@
 No Docker knowledge required. No YAML editing. Just answer a few questions and LabStart builds everything for you.
 
 </div>
----
 
 ## ✨ Features
 
