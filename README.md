@@ -1,6 +1,6 @@
 <div align="center">
 
-<img scr="screenshots/labstart.png" width="500">
+<img src="screenshots/labstart.png" width="500">
 
 **An interactive CLI wizard that generates a ready-to-run homelab in 5 minutes.**
 
