@@ -33,7 +33,6 @@ printf "${CYAN}╔════════════════════�
 printf "${CYAN}║     Welcome to LabStart - Your Homelab Setup Wizard!     ║${NC}\n"
 printf "${CYAN}╚══════════════════════════════════════════════════════════╝${NC}\n"
 echo ""
-sleep 1
 
 printf "${YELLOW}We will set up a simple homelab for you as you start!${NC}\n"
 printf "This Homelab Wizard will include some of these services as you start your journey:\n"
@@ -1052,12 +1051,35 @@ if [ "$DOCKER_INSTALLED" = true ]; then
         if [ "$VPN" = "wireguard" ]; then
             echo ""
             printf "${CYAN}[ WireGuard Setup ]${NC}\n"
-            printf "WireGuard automatically generated a peer on first start.\n"
+            printf "Waiting for WireGuard to generate peer configuration...\n"
+            
+            # Wait for container to be fully ready
+            sleep 5
+            
+            # Wait for QR code to be generated (max 30 seconds)
+            ATTEMPTS=0
+            QR_FOUND=false
+            while [ $ATTEMPTS -lt 30 ]; do
+                if sudo docker logs wireguard 2>&1 | grep -q "PEER 1 QR code"; then
+                    QR_FOUND=true
+                    break
+                fi
+                sleep 1
+                ATTEMPTS=$((ATTEMPTS + 1))
+            done
+            
             echo ""
-            printf "${CYAN}View the QR code:${NC}\n"
-            sudo docker logs wireguard 2>&1 | grep -A 35 "PEER 1 QR code" | tail -n 35
+            if [ "$QR_FOUND" = true ]; then
+                printf "${CYAN}Scan this QR code with WireGuard mobile app:${NC}\n"
+                echo ""
+                sudo docker logs wireguard 2>&1 | grep -A 35 "PEER 1 QR code" | tail -n 35
+            else
+                printf "${YELLOW}QR code not ready yet. View it with:${NC}\n"
+                printf "${YELLOW}sudo docker logs wireguard | grep -A 35 'PEER 1 QR code'${NC}\n"
+            fi
+            
             echo ""
-            printf "Client config saved to: ${YELLOW}config/wireguard/peer1/peer1.conf${NC}\n"
+            printf "Client config: ${YELLOW}config/wireguard/peer1/peer1.conf${NC}\n"
             printf "Server URL: ${YELLOW}${WG_SERVER_URL}:51820${NC}\n"
             printf "${YELLOW}Press Enter to continue...${NC}"
             read
