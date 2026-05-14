@@ -1055,10 +1055,49 @@ if [ "$DOCKER_INSTALLED" = true ]; then
             printf "WireGuard automatically generated a peer on first start.\n"
             echo ""
             printf "${CYAN}View the QR code:${NC}\n"
-            sudo docker logs wireguard | grep -A 35 "PEER 1 QR code"
+            sudo docker logs wireguard 2>&1 | grep -A 35 "PEER 1 QR code" | tail -n 35
             echo ""
             printf "Client config saved to: ${YELLOW}config/wireguard/peer1/peer1.conf${NC}\n"
             printf "Server URL: ${YELLOW}${WG_SERVER_URL}:51820${NC}\n"
+            printf "${YELLOW}Press Enter to continue...${NC}"
+            read
+        fi
+
+        # Tailscale post-install setup
+        if [ "$VPN" = "tailscale" ]; then
+            echo ""
+            printf "${CYAN}[ Tailscale Setup ]${NC}\n"
+            printf "Tailscale needs authentication.\n"
+            echo ""
+            printf "${CYAN}Run this command to get your auth URL:${NC}\n"
+            printf "${YELLOW}sudo docker logs tailscale${NC}\n"
+            echo ""
+            printf "Open the URL in your browser and authenticate.\n"
+            printf "${YELLOW}Press Enter to continue...${NC}"
+            read
+        fi
+
+        # OpenVPN post-install setup
+        if [ "$VPN" = "openvpn" ]; then
+            echo ""
+            printf "${CYAN}[ OpenVPN Setup ]${NC}\n"
+            printf "OpenVPN client config generated.\n"
+            echo ""
+            printf "Client config location: ${YELLOW}config/openvpn/client.ovpn${NC}\n"
+            printf "Download this file and import it into your OpenVPN client.\n"
+            printf "${YELLOW}Press Enter to continue...${NC}"
+            read
+        fi
+
+        # Headscale post-install setup
+        if [ "$VPN" = "headscale" ]; then
+            echo ""
+            printf "${CYAN}[ Headscale Setup ]${NC}\n"
+            printf "Headscale server is running.\n"
+            echo ""
+            printf "Create a user: ${YELLOW}sudo docker exec headscale headscale users create myuser${NC}\n"
+            printf "Generate key: ${YELLOW}sudo docker exec headscale headscale preauthkeys create -u myuser${NC}\n"
+            printf "See full docs at: ${YELLOW}docs/HEADSCALE.md${NC}\n"
             printf "${YELLOW}Press Enter to continue...${NC}"
             read
         fi
